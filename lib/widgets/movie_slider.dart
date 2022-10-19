@@ -1,10 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/Models/models.dart';
 
-class MovieSlider extends StatelessWidget {
+class MovieSlider extends StatefulWidget {
   final String? title;
   final List<Movie> movies;
-  const MovieSlider({Key? key, required this.movies, this.title}) : super(key: key);
+  final Function onNextPage;
+  const MovieSlider(
+      {Key? key, required this.movies, this.title, required this.onNextPage})
+      : super(key: key);
+
+  @override
+  State<MovieSlider> createState() => _MovieSliderState();
+}
+
+class _MovieSliderState extends State<MovieSlider> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 500) {
+        widget.onNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +41,13 @@ class MovieSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(title != null)
+          if (widget.title != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                title!,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                widget.title!,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           const SizedBox(
@@ -27,9 +55,11 @@ class MovieSlider extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: movies.length,
+              controller: scrollController,
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => _MoviePoster(movies[index]),
+              itemBuilder: (context, index) =>
+                  _MoviePoster(widget.movies[index]),
             ),
           ),
         ],
@@ -41,7 +71,7 @@ class MovieSlider extends StatelessWidget {
 class _MoviePoster extends StatelessWidget {
   final Movie movie;
 
-   const _MoviePoster(this.movie, {Key? key}) : super(key: key);
+  const _MoviePoster(this.movie, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
