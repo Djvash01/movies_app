@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CastingCard extends StatelessWidget {
-  const CastingCard({Key? key}) : super(key: key);
+  final String movieId;
+  const CastingCard({Key? key, required this.movieId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 30),
       width: double.infinity,
       height: 180,
-      color: Colors.red,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 10,
@@ -27,7 +28,6 @@ class _CastCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 110,
       height: 100,
-      color: Colors.green,
       child: Column(
         children: [
           ClipRRect(
@@ -37,10 +37,14 @@ class _CastCard extends StatelessWidget {
               image: NetworkImage('https://via.placeholder.com/150x300'),
               height: 140,
               width: 100,
+              fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 5,),
-          const Text('actor.name nammsmamsdmamsdmamsdmamsmdmasmdamsdm amsdmamsdmamsdm',
+          const SizedBox(
+            height: 5,
+          ),
+          const Text(
+            'actor.name nammsmamsdmamsdmamsdmamsmdmasmdamsdm amsdmamsdmamsdm',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
